@@ -34,7 +34,7 @@ SM_VSN="1.8.5"
 ARCH="$(uname -m)"
 
 . ${rootdir}/version.mk
-COUCHDB_VERSION=${vsn_major}.${vsn_minor}.${vsn_patch}
+COUCHDB_VERSION=${vsn_major}.${vsn_minor}.${vsn_patch}.${vsn_custom}
 
 display_help () {
     cat << EOF

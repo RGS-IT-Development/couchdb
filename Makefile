@@ -32,7 +32,7 @@ IN_RELEASE = $(shell if [ ! -d .git ]; then echo true; fi)
 ifeq ($(IN_RELEASE), true)
 
 # 1. Building from tarball, use version.mk.
-COUCHDB_VERSION = $(vsn_major).$(vsn_minor).$(vsn_patch)
+COUCHDB_VERSION = $(vsn_major).$(vsn_minor).$(vsn_patch).$(vsn_custom)
 
 else
 
@@ -44,10 +44,10 @@ IN_RC = $(shell git describe --tags --always --first-parent \
         | grep -Eo -- '-RC[0-9]+' 2>/dev/null)
 # ON_TAG matches *ONLY* if we are on a release or RC tag
 ON_TAG = $(shell git describe --tags --always --first-parent \
-        | grep -Eo -- '^[0-9]+\.[0-9]\.[0-9]+(-RC[0-9]+)?$$' 2>/dev/null)
+        | grep -Eo -- '^[0-9]+\.[0-9]\.[0-9]+(\.[0-9]+)?(-RC[0-9]+)?$$' 2>/dev/null)
 # REL_TAG contains the #.#.# from git describe, which might be used
 REL_TAG = $(shell git describe --tags --always --first-parent \
-        | grep -Eo -- '^[0-9]+\.[0-9]\.[0-9]+' 2>/dev/null)
+        | grep -Eo -- '^[0-9]+\.[0-9]\.[0-9]+(\.[0-9]+)?' 2>/dev/null)
 # DIRTY identifies if we're not on a commit
 DIRTY = $(shell git describe --dirty | grep -Eo -- '-dirty' 2>/dev/null)
 # COUCHDB_GIT_SHA is our current git hash.
@@ -56,7 +56,7 @@ COUCHDB_GIT_SHA=$(shell git rev-parse --short=7 --verify HEAD)
 ifeq ($(ON_TAG),)
 # 4. Not on a tag.
 COUCHDB_VERSION_SUFFIX = $(COUCHDB_GIT_SHA)$(DIRTY)
-COUCHDB_VERSION = $(vsn_major).$(vsn_minor).$(vsn_patch)-$(COUCHDB_VERSION_SUFFIX)
+COUCHDB_VERSION = $(vsn_major).$(vsn_minor).$(vsn_patch).$(vsn_custom)-$(COUCHDB_VERSION_SUFFIX)
 else
 # 2 and 3. On a tag.
 COUCHDB_VERSION = $(REL_TAG)$(DIRTY)
